@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.counting;
+
 
 public class TV {
 
     public static void main(String[] args) {
-        ArrayList<TVSet> tvSets = new ArrayList<>();
+        ArrayList<TVSet> tvSets;
 
         try {
             tvSets = readTvsFromFile("C:\\Users\\vikah\\IdeaProjects\\LR6\\src\\main\\java\\org\\example\\var.3");
@@ -26,11 +28,12 @@ public class TV {
             TVSet mostExpensive2 = findMostExpensive2(tvSets);
             Map<Boolean, List<TVSet>> tvsInto2Collections = dividingTVsInto2Collections(tvSets);
             Map<String, List<TVSet>> tvByBrand = groupingOfTVsByBrand(tvSets);
-            Map<String, Double> averagePriceByBrand = theNumberOfTVsAndTheAveragePriceForEachBrand(tvSets);
+            Map<String, Long> statsByBrand = theNumberOfTVsForEachBrand(tvSets);
+            Map<String, Double> averagePriceByBrand = theAveragePriceForEachBrand(tvSets);
             String tvModels = tvModelsWithJoining(tvSets);
             writeResultsToFile(tvSets, tvsByName, tvsByPrice, mostExpensive, highlyRatedTelevisions,
                     averageCost, theCheapest32InchTV, allTVsHaveACustomerRatingOfMoreThan4, aTVWorthMoreThan30000Rubles,
-                    mostExpensive2, tvsInto2Collections, tvByBrand, averagePriceByBrand, tvModels);
+                    mostExpensive2, tvsInto2Collections, tvByBrand, averagePriceByBrand, statsByBrand, tvModels);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,8 +44,8 @@ public class TV {
                                            ArrayList<TVSet> highlyRatedTelevisions, double averageCost, TVSet theCheapest32InchTV,
                                            boolean allTVsHaveACustomerRatingOfMoreThan4, boolean aTVWorthMoreThan30000Rubles,
                                            TVSet mostExpensive2, Map<Boolean, List<TVSet>> tvsInto2Collections, Map<String,
-                                           List<TVSet>> tvByBrand, Map<String, Double> theNumberOfTVsAndTheAveragePriceForEachBrand,
-                                           String tvModelsWithJoining) {
+                                           List<TVSet>> tvByBrand, Map<String, Double> averagePriceByBrand,
+                                           Map<String, Long> statsByBrand, String tvModelsWithJoining) {
         try (PrintWriter writer = new PrintWriter("results.txt")) {
             writer.println("Список песен: \n" + tvSets + "\n");
             writer.println("Сортировка телевизоров по наименованию: \n" + sortingTVsByName + "\n");
@@ -56,8 +59,8 @@ public class TV {
             writer.println("Самый дорогой телевизор с помощью maxBy(): \n" + mostExpensive2 + "\n");
             writer.println("Разделение телевизоров на 2 коллекции: с диагональю меньше и больше 30 дюймов: \n" + tvsInto2Collections.get(false) + "\n" + tvsInto2Collections.get(true) + "\n");
             writer.println("Группировка телевизоров по бренду: \n" + tvByBrand + "\n");
-            writer.println("Количество телевизоров и средняя цена по брендам: \n" + theNumberOfTVsAndTheAveragePriceForEachBrand + "\n");
-            writer.println("Модели телевизоров стоимостью от 10 до 15 тыс. руб.: " + tvModelsWithJoining + "\n");
+            writer.println("Количество телевизоров и средняя цена по брендам: \n" + statsByBrand + "\n" + averagePriceByBrand + "\n");
+            writer.println("Модели телевизоров стоимостью от 10 до 15 тыс. руб.: " + tvModelsWithJoining + ".\n");
         } catch (FileNotFoundException e) {
             System.out.println("Ошибка чтения файла");
         }
@@ -86,14 +89,14 @@ public class TV {
 
     private static ArrayList<TVSet> sortingTVsByPriceInOrderOfDecreasingCost(ArrayList<TVSet> tvSets) {
         ArrayList<TVSet> tvsByPrice = (ArrayList<TVSet>) tvSets.stream()
-                .sorted((tv1, tv2) -> Double.compare(tv2.getPricePerItem(), tv1.getPricePerItem()))
+                .sorted((tv1, tv2) -> Integer.compare(tv2.getPricePerItem(), tv1.getPricePerItem()))
                 .collect(Collectors.toList());
         return tvsByPrice;
     }
     private static TVSet findMostExpensive(ArrayList<TVSet> tvSets){
         TVSet mostExpensive = tvSets.stream()
-                .max((tv1, tv2) -> Double.compare(tv1.getPricePerItem(), tv2.getPricePerItem()))
-                .orElse(null);
+                .max((tv1, tv2) -> Integer.compare(tv1.getPricePerItem(), tv2.getPricePerItem()))
+                .orElse(new TVSet(0,"anon","anon",0,0,0));
         return mostExpensive;
     }
     private static ArrayList<TVSet> findHighlyRatedTelevisions(ArrayList<TVSet> tvSets){
@@ -115,7 +118,7 @@ public class TV {
         TVSet theCheapest32InchTV = tvSets.stream()
                 .filter(tv -> tv.getDiagonal() == 32)
                 .min((tv1, tv2) -> Double.compare(tv1.getPricePerItem(), tv2.getPricePerItem()))
-                .orElse(null);
+                .orElse(new TVSet(0,"anon","anon",0,0,0));
         return theCheapest32InchTV;
     }
 
@@ -134,7 +137,7 @@ public class TV {
     private static TVSet findMostExpensive2(ArrayList<TVSet> tvSets){
         TVSet mostExpensive2 = tvSets.stream()
                 .collect(Collectors.maxBy(Comparator.comparing(TVSet :: getPricePerItem)))
-                .orElse(null);
+                .orElse(new TVSet(0,"anon","anon",0,0,0));
         return mostExpensive2;
     }
 
@@ -150,19 +153,23 @@ public class TV {
         return (Map<String, List<TVSet>>) tvByBrand;
     }
 
-    private static Map<String, Double> theNumberOfTVsAndTheAveragePriceForEachBrand(ArrayList<TVSet> tvSets){
+    private static Map<String, Long> theNumberOfTVsForEachBrand(ArrayList<TVSet> tvSets){
+        Map<String, Long> statsByBrand = tvSets.stream()
+                .collect(Collectors.groupingBy(TVSet::getBrand, counting()));
+        return statsByBrand;
+    }
+
+    private static Map<String, Double> theAveragePriceForEachBrand(ArrayList<TVSet> tvSets){
         Map<String, Double> averagePriceByBrand = tvSets.stream()
-                .collect(Collectors.groupingBy(TVSet::getName, Collectors.averagingDouble(TVSet::getPricePerItem)));
+                .collect(Collectors.groupingBy(TVSet::getBrand, Collectors.averagingDouble(TVSet::getPricePerItem)));
         return averagePriceByBrand;
     }
+
     private static String tvModelsWithJoining(ArrayList<TVSet> tvSets){
         String tvModels = tvSets.stream()
                 .filter(tv -> tv.getPricePerItem() >= 10000 && tv.getPricePerItem() <= 15000)
                 .map(TVSet::getName)
                 .collect(Collectors.joining(", "));
         return tvModels;
+        }
     }
-}
-
-
-

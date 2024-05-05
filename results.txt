@@ -34,7 +34,8 @@ TVSet(ID=10, name=BBK 39LEX-7289/TS2C, brand=BBK, diagonal=39, pricePerItem=1489
 {Kivi 32H600GR=[TVSet(ID=7, name=Kivi 32H600GR, brand=Kivi, diagonal=32, pricePerItem=10999, rating=4.0)], Hyundai H-LED32ET3001=[TVSet(ID=5, name=Hyundai H-LED32ET3001, brand=Hyundai, diagonal=32, pricePerItem=9499, rating=4.8)], Polarline 22PL12TC=[TVSet(ID=3, name=Polarline 22PL12TC, brand=Polarline, diagonal=22, pricePerItem=8099, rating=4.3)], Philips 32PHS4132=[TVSet(ID=8, name=Philips 32PHS4132, brand=Philips, diagonal=32, pricePerItem=12999, rating=4.6)], BBK 39LEX-7289/TS2C=[TVSet(ID=10, name=BBK 39LEX-7289/TS2C, brand=BBK, diagonal=39, pricePerItem=14899, rating=4.5)], DEXP F24D7200E=[TVSet(ID=2, name=DEXP F24D7200E, brand=DEXP, diagonal=24, pricePerItem=7499, rating=4.5)], Shivaki STV-22LED26=[TVSet(ID=1, name=Shivaki STV-22LED26, brand=Shivaki, diagonal=22, pricePerItem=6899, rating=3.8)], Prestigio Odyssey PTV32SN03Z=[TVSet(ID=4, name=Prestigio Odyssey PTV32SN03Z, brand=Prestigio, diagonal=32, pricePerItem=8899, rating=4.8)], LG 28TL510V-WZ=[TVSet(ID=9, name=LG 28TL510V-WZ, brand=LG, diagonal=28, pricePerItem=13899, rating=4.7)], Daewoo L32A650VBE=[TVSet(ID=6, name=Daewoo L32A650VBE, brand=Daewoo, diagonal=32, pricePerItem=10499, rating=4.4)]}
 
 Количество телевизоров и средняя цена по брендам: 
-{Kivi 32H600GR=10999.0, Hyundai H-LED32ET3001=9499.0, Polarline 22PL12TC=8099.0, Philips 32PHS4132=12999.0, BBK 39LEX-7289/TS2C=14899.0, DEXP F24D7200E=7499.0, Shivaki STV-22LED26=6899.0, Prestigio Odyssey PTV32SN03Z=8899.0, LG 28TL510V-WZ=13899.0, Daewoo L32A650VBE=10499.0}
+{Kivi=1, Philips=1, DEXP=1, Shivaki=1, Prestigio=1, Polarline=1, BBK=1, LG=1, Hyundai=1, Daewoo=1}
+{Kivi=10999.0, Philips=12999.0, DEXP=7499.0, Shivaki=6899.0, Prestigio=8899.0, Polarline=8099.0, BBK=14899.0, LG=13899.0, Hyundai=9499.0, Daewoo=10499.0}
 
-Модели телевизоров стоимостью от 10 до 15 тыс. руб.: Daewoo L32A650VBE, Kivi 32H600GR, Philips 32PHS4132, LG 28TL510V-WZ, BBK 39LEX-7289/TS2C
+Модели телевизоров стоимостью от 10 до 15 тыс. руб.: Daewoo L32A650VBE, Kivi 32H600GR, Philips 32PHS4132, LG 28TL510V-WZ, BBK 39LEX-7289/TS2C.
 
